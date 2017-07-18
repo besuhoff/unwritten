@@ -315,7 +315,7 @@
 
         // detect index
         if (path[i] !== undefined && path[i] !== "") {
-          state.index = Number(path[i]);
+          state.index = (Number(path[i]) - 1 + state.data.length) % state.data.length + 1;
           i++;
         }
 
