@@ -328,7 +328,7 @@
 
       function getIndex(state, delta) {
         if (!state.tag) {
-          return (state.data.length + state.index + delta) % state.data.length;
+          return (state.data.length + state.index - 1 + delta) % state.data.length + 1;
         }
 
         var currentItem = state.data[state.index - 1];
@@ -402,8 +402,6 @@
         renderTemplate('main');
         initNavigation();
       }
-
-      console.log(location.pathname);
 
       initLinks();
       bootstrap(location.pathname);
