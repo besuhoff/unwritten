@@ -4,6 +4,10 @@
     <base href="/">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url"           content="" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="Из ненаписанного" />
+    <meta property="og:image"         content="http://unwritten.pereborstudio.com/screen.png" />
     <title>Из ненаписанного</title>
     <link rel="stylesheet" href="style.css">
   </head>
@@ -28,11 +32,21 @@
         <div class="tags">
           {{tags}}
         </div>
+
+        <div class="social">
+          <div class="fb-like"
+               data-href="{{uri}}"
+               data-action="like"
+               data-share="true"
+               data-layout="button_count"
+               data-colorscheme="dark">
+          </div>
+        </div>
       </section>
     </template>
 
     <template id="tag">
-      <a href="{{uri}}" {{active}}><span>{{tag}}</span></a>
+      <a href="{{tagUri}}" {{active}}><span>{{tag}}</span></a>
     </template>
 
     <script>
@@ -324,6 +338,7 @@
         }
 
         history.pushState({}, document.querySelector('title').innerText, renderStateIntoUrl());
+        document.querySelector('[property="og:url"]').setAttribute('content', location.href);
       }
 
       function getIndex(state, delta) {
@@ -358,19 +373,24 @@
       function renderTemplate(target) {
         var html = document.querySelector('#main').innerHTML;
         var item = state.data[state.index - 1];
-        html = html.replace(/\{\{content}}/g, item.content);
-        html = html.replace(/\{\{index}}/g, state.index);
-        html = html.replace(/\{\{quantity}}/g, state.data.length);
+        html = html
+          .replace(/\{\{uri}}/g, location.href)
+          .replace(/\{\{content}}/g, item.content)
+          .replace(/\{\{index}}/g, state.index)
+          .replace(/\{\{quantity}}/g, state.data.length);
 
         var tagHtml = document.querySelector('#tag').innerHTML;
         var tagsHtml = item.tags.map(function(tagText) {
           return tagHtml
-            .replace(/\{\{uri}}/g, (tagText === state.tag ? '' : '/tags/' + tagText) + '/' + state.index)
+            .replace(/\{\{tagUri}}/g, (tagText === state.tag ? '' : '/tags/' + tagText) + '/' + state.index)
             .replace(/\{\{tag}}/g, tagText)
             .replace(/\{\{active}}/g, tagText === state.tag ? 'class="active"' : '');
         });
         html = html.replace(/\{\{tags}}/g, tagsHtml.join(''));
         document.querySelector(target).innerHTML = html;
+        if (window.FB) {
+          window.FB.XFBML.parse(document.querySelector(target));
+        }
       }
 
       function initNavigation() {
@@ -406,5 +426,15 @@
       initLinks();
       bootstrap(location.pathname);
     </script>
+
+    <!-- Load Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v2.10";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
   </body>
 </html>
