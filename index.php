@@ -1,15 +1,24 @@
+<?php
+
+  $base = '/';
+
+  $actualLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  preg_match('/\/(\d+)$/', $_SERVER['REQUEST_URI'], $matches);
+  $index = $matches[1] || '1';
+  $screenshotLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$base" . "screenshots/$index.png";
+?>
 <!DOCTYPE html>
 <html>
   <head>
-    <base href="/">
+    <base href="<?php echo $base; ?>">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:url"           content="" />
+    <meta property="og:url"           content="<?php echo $actualLink; ?>" />
     <meta property="og:type"          content="website" />
     <meta property="og:title"         content="Из ненаписанного" />
-    <meta property="og:image"         content="" />
+    <meta property="og:image"         content="<?php echo $screenshotLink; ?>" />
     <title>Из ненаписанного</title>
-    <link rel="stylesheet" href="style.css?19072017t1116">
+    <link rel="stylesheet" href="style.css?19072017t1711">
   </head>
   <body>
     <nav>
