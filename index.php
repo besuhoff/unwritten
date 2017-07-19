@@ -4,7 +4,7 @@
 
   $actualLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
   preg_match('/\/(\d+)$/', $_SERVER['REQUEST_URI'], $matches);
-  $index = $matches[1] || '1';
+  $index = isset($matches[1]) ? $matches[1] : '1';
   $screenshotLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$base" . "screenshots/$index.png";
 ?>
 <!DOCTYPE html>
