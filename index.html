@@ -243,7 +243,7 @@
           tags: ['из_ненаписанного', 'записки_анонимного_невротика']
         },
         {
-          content: '<p>Папа и мама смотрели телевизор каждый в своей комнате, но это не давало папе никакой дополнительной свободы, как можно было бы ожидать. Мама просто периодически приходила с кухни с указаниями вроде «включай СТБ, икс-фактор пропустишь!» или «сериал барахло пошел, давай ‘‘Украину″, там свежие новости». Так и жили они душа в душу</p>',
+          content: '<p>Папа и мама смотрели телевизор каждый в своей комнате, но это не давало папе никакой дополнительной свободы, как можно было бы ожидать. Мама просто периодически приходила с кухни с указаниями вроде «включай СТБ, икс-фактор пропустишь!» или «сериал барахло пошел, давай „Украину“, там свежие новости». Так и жили они душа в душу</p>',
           tags: ['из_ненаписанного', 'хроники_коммунальной_квартиры']
         },
         {
@@ -342,6 +342,8 @@
 
         history.pushState({}, document.querySelector('title').innerText, renderStateIntoUrl());
         document.querySelector('[property="og:url"]').setAttribute('content', location.href);
+        document.querySelector('[property="og:image"]')
+          .setAttribute('content', location.origin + getBaseUrl() + 'screenshots/' + state.index + '.png');
       }
 
       function getIndex(state, delta) {
@@ -373,12 +375,6 @@
         return getIndex(state, delta);
       }
 
-      function takeScreenshot() {
-        html2canvas(document.getElementById('content')).then(function(canvas) {
-          document.querySelector('[property="og:image"]').setAttribute('content', canvas.toDataURL());
-        });
-      }
-
       function renderTemplate(target) {
         var html = document.querySelector('#main').innerHTML;
         var item = state.data[state.index - 1];
@@ -400,8 +396,6 @@
         if (window.FB) {
           window.FB.XFBML.parse(document.querySelector(target));
         }
-
-        takeScreenshot();
       }
 
       function initNavigation() {
