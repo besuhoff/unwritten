@@ -5,6 +5,7 @@
   preg_match('/\/(\d+)$/', $_SERVER['REQUEST_URI'], $matches);
   $index = isset($matches[1]) ? $matches[1] : '1';
   $screenshotLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$base" . "screenshots/$index.png";
+  $postLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$base$index";
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@
     <base href="<?php echo $base; ?>">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:url"           content="<?php echo $actualLink; ?>" />
+    <meta property="og:url"           content="<?php echo $postLink; ?>" />
     <meta property="og:type"          content="website" />
     <meta property="og:title"         content="Из ненаписанного" />
     <meta property="og:image"         content="<?php echo $screenshotLink; ?>" />
@@ -44,7 +45,7 @@
       <section>
         <div class="social">
           <div class="fb-like"
-               data-href="{{uri}}"
+               data-href="{{shareUri}}"
                data-action="like"
                data-share="true"
                data-layout="button_count"
@@ -315,13 +316,13 @@
       function renderStateIntoUrl(tag, index) {
         var parts = [];
 
-        if (tag !== undefined || state.tag) {
+        if (tag || (tag === undefined && state.tag)) {
           parts.push('tags');
-          parts.push(tag !== undefined ? tag : state.tag);
+          parts.push(tag ? tag : state.tag);
         }
 
-        if (index !== undefined || state.index !== null) {
-          parts.push(index !== undefined ? index : state.index);
+        if (index || (index === undefined && state.index)) {
+          parts.push(index ? index : state.index);
         }
 
         return getBaseUrl().replace(/\/$/, '') + '/' + parts.join('/');
@@ -338,7 +339,7 @@
         var i = 0;
         // detect tag
         if (path[i] === 'tags') {
-          state.tag = path[i + 1];
+          state.tag = decodeURIComponent(path[i + 1]);
           i += 2;
         } else {
           state.tag = '';
@@ -355,7 +356,7 @@
         }
 
         history.pushState({}, document.querySelector('title').innerText, renderStateIntoUrl());
-        document.querySelector('[property="og:url"]').setAttribute('content', location.href);
+        document.querySelector('[property="og:url"]').setAttribute('content', renderStateIntoUrl(null, state.index));
         document.querySelector('[property="og:image"]')
           .setAttribute('content', location.origin + getBaseUrl() + 'screenshots/' + state.index + '.png');
       }
@@ -370,6 +371,24 @@
         var targetItem = tagData[(tagData.length + tagData.indexOf(currentItem) + delta) % tagData.length];
 
         return state.data.indexOf(targetItem) + 1;
+      }
+
+      function getFirstIndex(state) {
+        if (!state.tag) {
+          return 1;
+        }
+
+        var tagData = state.data.filter(function(item) { return item.tags.indexOf(state.tag) !== -1 });
+        return state.data.indexOf(tagData[0]) + 1;
+      }
+
+      function getLastIndex(state) {
+        if (!state.tag) {
+          return state.data.length;
+        }
+
+        var tagData = state.data.filter(function(item) { return item.tags.indexOf(state.tag) !== -1 });
+        return state.data.indexOf(tagData[tagData.length - 1]) + 1;
       }
 
       function getNextIndex(state) {
@@ -393,7 +412,7 @@
         var html = document.querySelector('#main').innerHTML;
         var item = state.data[state.index - 1];
         html = html
-          .replace(/\{\{uri}}/g, location.href)
+          .replace(/\{\{shareUri}}/g, renderStateIntoUrl(null, state.index))
           .replace(/\{\{content}}/g, item.content)
           .replace(/\{\{index}}/g, state.index)
           .replace(/\{\{quantity}}/g, state.data.length);
@@ -413,8 +432,8 @@
       }
 
       function initNavigation() {
-        document.querySelector('[state-ref="first"]').href = renderStateIntoUrl(undefined, 1);
-        document.querySelector('[state-ref="last"]').href = renderStateIntoUrl(undefined, state.data.length);
+        document.querySelector('[state-ref="first"]').href = renderStateIntoUrl(undefined, getFirstIndex(state));
+        document.querySelector('[state-ref="last"]').href = renderStateIntoUrl(undefined, getLastIndex(state));
         document.querySelector('[state-ref="random"]').href = renderStateIntoUrl(undefined, getRandomIndex(state));
         document.querySelector('[state-ref="next"]').href = renderStateIntoUrl(undefined, getNextIndex(state));
         document.querySelector('[state-ref="back"]').href = renderStateIntoUrl(undefined, getPreviousIndex(state));
