@@ -352,7 +352,13 @@
         }
 
         if (state.index === null) {
-          state.index = 1;
+          if (!state.tag) {
+            state.index = 1;
+          } else {
+            var tagData = state.data.filter(function(item) { return item.tags.indexOf(state.tag) !== -1 });
+
+            state.index = state.data.indexOf(tagData[0]);
+          }
         }
 
         history.pushState({}, document.querySelector('title').innerText, renderStateIntoUrl());
