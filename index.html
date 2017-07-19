@@ -24,7 +24,7 @@
     <main></main>
 
     <template id="main">
-      <section>
+      <section id="content">
         <span class="index">{{index}}/{{quantity}}</span>
 
         {{content}}
@@ -32,7 +32,8 @@
         <div class="tags">
           {{tags}}
         </div>
-
+      </section>
+      <section>
         <div class="social">
           <div class="fb-like"
                data-href="{{uri}}"
@@ -48,6 +49,8 @@
     <template id="tag">
       <a href="{{tagUri}}" {{active}}><span>{{tag}}</span></a>
     </template>
+
+    <script src="html2canvas.js"></script>
 
     <script>
       var data = [
@@ -370,6 +373,12 @@
         return getIndex(state, delta);
       }
 
+      function takeScreenshot() {
+        html2canvas(document.getElementById('content')).then(function(canvas) {
+          document.querySelector('[property="og:image"]').setAttribute('content', canvas.toDataURL());
+        });
+      }
+
       function renderTemplate(target) {
         var html = document.querySelector('#main').innerHTML;
         var item = state.data[state.index - 1];
@@ -391,6 +400,8 @@
         if (window.FB) {
           window.FB.XFBML.parse(document.querySelector(target));
         }
+
+        takeScreenshot();
       }
 
       function initNavigation() {
