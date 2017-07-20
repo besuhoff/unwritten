@@ -475,7 +475,7 @@
       initLinks();
 
       window.onpopstate = function() {
-        syncUrlState(url);
+        syncUrlState(location.href);
         renderTemplate('main');
         initNavigation();
       };
