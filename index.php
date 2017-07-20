@@ -62,7 +62,7 @@
     <div id="fb-root"></div>
 
     <div class="copy">
-      Я &ndash; <a href="https://www.facebook.com/besuhoff">Сережа Переверзев</a>. Тут копятся мои размышлизмы и наблюлы. Ещё мы с женой <a href="https://pereborstudio.com">делаем сайты</a>.
+      Я &mdash; <a href="https://www.facebook.com/besuhoff">Сережа Переверзев</a>. Тут копятся мои размышлизмы и наблюлы. Ещё мы с женой <a href="https://pereborstudio.com">делаем сайты</a>.
     </div>
 
     <script>
