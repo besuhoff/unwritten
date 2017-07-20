@@ -334,7 +334,7 @@
         return getBaseUrl().replace(/\/$/, '') + '/' + parts.join('/');
       }
 
-      function syncUrlState(url) {
+      function syncUrlState(url, push) {
         var baseUrl = getBaseUrl();
         // Subtract base from path
         var path = url.split(baseUrl);
@@ -367,7 +367,9 @@
           }
         }
 
-        history.pushState({}, document.querySelector('title').innerText, renderStateIntoUrl());
+        if (push === undefined || push) {
+          history.pushState(state, document.querySelector('title').innerText, renderStateIntoUrl());
+        }
         document.querySelector('[property="og:url"]').setAttribute('content', renderStateIntoUrl(null, state.index));
         document.querySelector('[property="og:image"]')
           .setAttribute('content', location.origin + getBaseUrl() + 'screenshots/' + state.index + '.png');
@@ -474,10 +476,12 @@
 
       initLinks();
 
-      window.onpopstate = function() {
-        syncUrlState(location.href);
-        renderTemplate('main');
-        initNavigation();
+      window.onpopstate = function(event) {
+        if (event.state) {
+          syncUrlState(renderStateIntoUrl(event.state.tag, event.state.index), false);
+          renderTemplate('main');
+          initNavigation();
+        }
       };
 
       bootstrap(location.pathname);
