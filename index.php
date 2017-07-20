@@ -59,6 +59,12 @@
       <a href="{{tagUri}}" {{active}}><span>{{tag}}</span></a>
     </template>
 
+    <div id="fb-root"></div>
+
+    <div class="copy">
+      Я &ndash; <a href="https://www.facebook.com/besuhoff">Сережа Переверзев</a>. Тут копятся мои размышлизмы и наблюлы. Ещё мы с женой <a href="https://pereborstudio.com">делаем сайты</a>.
+    </div>
+
     <script>
       var data = [
         {
@@ -450,7 +456,6 @@
           var target = e.target;
           while (target) {
             if (target.getAttribute && target.getAttribute('href') && target.getAttribute('href').split(getBaseUrl())[0] === '') {
-              history.pushState({}, document.querySelector('title').innerText, target.getAttribute('href'));
               bootstrap(target.getAttribute('href'));
               e.preventDefault();
               break;
@@ -468,6 +473,13 @@
       }
 
       initLinks();
+
+      window.onpopstate = function() {
+        syncUrlState(url);
+        renderTemplate('main');
+        initNavigation();
+      };
+
       bootstrap(location.pathname);
     </script>
 

@@ -7,6 +7,7 @@ a {
   text-decoration: none;
   border-bottom: 1px solid;
   transition: color 0.25s;
+  color: #fff;
 }
 
 a:hover, a:focus {
@@ -39,20 +40,13 @@ main {
   min-width: 320px;
 }
 
-body::after {
-  content: '';
-  display: block;
-  height: 20px;
-}
-
 nav {
   flex: 0 0 auto;
   display: flex;
   margin: 0 0 20px;
 }
 
-nav,
-tags {
+nav {
   font: 14px/1 Open Sans, sans-serif;
 }
 
@@ -60,23 +54,39 @@ tags {
 .next {
   color: #fff;
   text-decoration: none;
+  border: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+}
+
+.back {
+  left: 16px;
+}
+
+.next {
+  right: 16px;
+}
+
+.back:after,
+.next:after {
+  content: '';
   display: block;
+  position: absolute;
+  top: 50%;
+  margin-top: -18px;
   width: 30px;
   height: 30px;
   border: solid;
   border-width: 2px 2px 0 0;
-  position: absolute;
-  top: 50%;
-  margin-top: -18px;
 }
 
-.back {
-  left: 20px;
+.back:after {
   transform: rotate(225deg);
 }
 
-.next {
-  right: 20px;
+.next:after {
   transform: rotate(45deg);
 }
 
@@ -85,7 +95,7 @@ tags {
 }
 
 .tags a {
-  font-size: 90%;
+  font-size: 16px;
   color: #888;
   border-bottom: 0;
 }
@@ -136,7 +146,6 @@ tags {
 }
 
 nav a {
-  color: #fff;
   display: block;
   margin: 6px;
 }
@@ -163,4 +172,27 @@ template {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+.copy {
+  font-size: 12px;
+  line-height: 18px;
+  font-family: Open Sans, sans-serif;
+  margin: 48px 0 0;
+  padding: 0 40px;
+}
+
+.copy a {
+  border-bottom: 0;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 16px;
+  }
+
+  .tags a {
+    font-size: 13px;
+  }
 }
