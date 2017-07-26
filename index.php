@@ -492,6 +492,8 @@
         })
 
       }
+      
+      document.addEventListener('keydown', e => location.href = 'http://unwritten.pereborstudio.com/' + (+location.pathname.slice(1) + (e.keyCode - 38)))
 
       function bootstrap(url) {
         syncUrlState(url);
