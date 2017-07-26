@@ -27,10 +27,11 @@
       <a state-ref="last">В конец</a>
     </nav>
 
-    <a state-ref="back" class="back"></a>
-    <a state-ref="next" class="next"></a>
-
-    <main></main>
+    <div class="row">
+      <a state-ref="back" class="back"></a>
+      <main></main>
+      <a state-ref="next" class="next"></a>
+    </div>
 
     <template id="main">
       <section id="content">
@@ -466,6 +467,30 @@
             target = target.parentNode;
           }
         });
+
+        document.addEventListener('keydown', function(event) {
+          var target;
+
+          switch(event.keyCode) {
+            case 36: // Home
+              target = document.querySelector('[state-ref="first"]');
+              break;
+            case 35: // End
+              target = document.querySelector('[state-ref="last"]');
+              break;
+            case 37: // Left arrow
+            case 33: // Page up
+              target = document.querySelector('[state-ref="back"]');
+              break;
+            case 39: // Right arrow
+            case 34: // Page down
+              target = document.querySelector('[state-ref="next"]');
+              break;
+          }
+
+          bootstrap(target.getAttribute('href'));
+        })
+
       }
 
       function bootstrap(url) {
