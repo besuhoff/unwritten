@@ -18,7 +18,7 @@
     <meta property="og:title"         content="Из ненаписанного" />
     <meta property="og:image"         content="<?php echo $screenshotLink; ?>" />
     <title>Из ненаписанного</title>
-    <link rel="stylesheet" href="style.css?19072017t1711">
+    <link rel="stylesheet" href="style.css?260720172130">
   </head>
   <body>
     <nav>
@@ -66,6 +66,7 @@
       Я &mdash; <a href="https://www.facebook.com/besuhoff">Сережа Переверзев</a>. Тут копятся мои размышлизмы и наблюлы. Ещё мы с женой <a href="https://pereborstudio.com">делаем сайты</a>.
     </div>
 
+    <script src="swipeDetect.js?26072017t2130"></script>
     <script>
       var data = [
         {
@@ -469,7 +470,7 @@
         });
 
         document.addEventListener('keydown', function(event) {
-          var target;
+          var target = null;
 
           switch(event.keyCode) {
             case 36: // Home
@@ -488,9 +489,27 @@
               break;
           }
 
-          bootstrap(target.getAttribute('href'));
-        })
+          if (target) {
+            bootstrap(target.getAttribute('href'));
+          }
+        });
 
+        swipedetect(document, function(swipeDirection) {
+          var target = null;
+
+          switch(swipeDirection) {
+            case 'right':
+              target = document.querySelector('[state-ref="back"]');
+              break;
+            case 'left':
+              target = document.querySelector('[state-ref="next"]');
+              break;
+          }
+
+          if (target) {
+            bootstrap(target.getAttribute('href'));
+          }
+        })
       }
 
       function bootstrap(url) {
