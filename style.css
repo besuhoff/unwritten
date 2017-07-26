@@ -32,12 +32,21 @@ body {
   justify-content: space-between;
   align-items: center;
   min-height: 100%;
-  min-width: 320px;
   position: relative;
+  min-width: 320px;
+}
+
+.row {
+  align-self: stretch;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  min-width: 320px;
 }
 
 main {
-  min-width: 320px;
+  width: 680px;
+  flex: 0 1 auto;
 }
 
 nav {
@@ -55,27 +64,16 @@ nav {
   color: #fff;
   text-decoration: none;
   border: 0;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 30px;
-}
-
-.back {
-  left: 16px;
-}
-
-.next {
-  right: 16px;
+  flex-grow: 1;
+  align-self: stretch;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
 }
 
 .back:after,
 .next:after {
   content: '';
-  display: block;
-  position: absolute;
-  top: 50%;
-  margin-top: -18px;
   width: 30px;
   height: 30px;
   border: solid;
@@ -83,11 +81,15 @@ nav {
 }
 
 .back:after {
+  align-self: flex-start;
+  margin-left: 10px;
   transform: rotate(225deg);
 }
 
 .next:after {
   transform: rotate(45deg);
+  align-self: flex-end;
+  margin-right: 10px;
 }
 
 .tags {
@@ -160,8 +162,6 @@ nav a {
 section {
   align-self: center;
   overflow: hidden;
-  max-width: 680px;
-  padding: 0 40px;
 }
 
 template {
